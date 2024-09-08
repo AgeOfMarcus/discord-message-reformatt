@@ -18,9 +18,8 @@ def main():
 
     for folder in os.listdir(args.path):
         try:
-            content = json.load(open(
-                os.path.join(args.path, folder, 'messages.json')
-            ))
+            with open(os.path.join(args.path, folder), 'r') as f:
+                content = json.loads(f.read())
 
             for msg in content:
                 if (text := msg.get('Contents')):
