@@ -22,8 +22,13 @@ def strip_mentions(text: str) -> str:
 # old: '''(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])'''
 def strip_links(text: str) -> str:
     matches = re.findall("((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))", text)
-    for match in matches[0]:
-        text = text.replace(match, '')
+    if matches:
+        if type(matches[0]) in [list, tuple]:
+            fixed_matches = matches[0]
+        else:
+            fixed_matches = matches
+        for match in fixed_matches:
+            text = text.replace(match, '')
     return text
 
 def strip_commands(
