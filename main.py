@@ -28,8 +28,11 @@ def main():
                         if (text := msg.get('Contents')):
                             messages.append(text)
                     except Exception as e:
-                        print(f"err: {e}\nmsg: {msg}")
-                        raise e
+                        print(f"err: {e}")
+                        print(f"msg: {msg}")
+                        print(f"file: {file}")
+                        print(f"folder: {folder}")
+                        exit(1)
 
     with open(args.outfile, 'w') as f:
         f.write('\n'.join(messages))
