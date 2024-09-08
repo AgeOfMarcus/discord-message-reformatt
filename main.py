@@ -17,22 +17,16 @@ def main():
     messages = []
 
     for folder in os.listdir(args.path):
-        for file in os.listdir(os.path.join(args.path, folder)):
-            if file.endswith('.json'):
-                content = json.load(open(
-                    os.path.join(args.path, folder, file)
-                ))
+        try:
+            content = json.load(open(
+                os.path.join(args.path, folder, 'messages.json')
+            ))
 
-                for msg in content:
-                    try:
-                        if (text := msg.get('Contents')):
-                            messages.append(text)
-                    except Exception as e:
-                        print(f"err: {e}")
-                        print(f"msg: {msg}")
-                        print(f"file: {file}")
-                        print(f"folder: {folder}")
-                        exit(1)
+            for msg in content:
+                if (text := msg.get('Contents')):
+                    messages.append(text)
+        except Exception as e:
+            print(f'Error in {folder}: {e}')
 
     with open(args.outfile, 'w') as f:
         f.write('\n'.join(messages))
