@@ -30,7 +30,7 @@ def main():
         except Exception as e:
             print(f'Error in {folder}: {e}')
 
-    with open(args.outfile, 'w') as f:
+    with open(args.outfile, 'w', encoding="utf-8") as f:
         f.write('\n'.join(messages))
     print('Written results to', args.outfile)
     print('Total lines:', len(messages))
