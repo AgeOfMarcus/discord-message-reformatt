@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import re
 
 def parse_args():
     p = argparse.ArgumentParser()
@@ -11,6 +12,19 @@ def parse_args():
     if not os.path.exists(args.path):
         p.error(f'Path {args.path} does not exist')
     return args
+
+def strip_mentions(text: str) -> str:
+    matches = re.findall('@<(\d+)>', text)
+    for match in matches:
+        text = text.replace(f'@<{match}>', '')
+    return text
+
+def strip_links(text: str) -> str:
+    matches = re.findall('''(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])
+''', text)
+    for match in matches:
+        text = text.replace(match, '')
+    return text
 
 def main():
     args = parse_args()
@@ -26,7 +40,10 @@ def main():
 
             for msg in content:
                 if (text := msg.get('Contents')):
-                    messages.append(text)
+                    stripped = strip_links(
+                        strip_mentions(text)
+                    )
+                    messages.append(stripped)
         except Exception as e:
             print(f'Error in {folder}: {e}')
 
