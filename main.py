@@ -24,8 +24,12 @@ def main():
                 ))
 
                 for msg in content:
-                    if (text := msg.get('Contents')):
-                        messages.append(text)
+                    try:
+                        if (text := msg.get('Contents')):
+                            messages.append(text)
+                    except Exception as e:
+                        print(f"err: {e}\nmsg: {msg}")
+                        raise e
 
     with open(args.outfile, 'w') as f:
         f.write('\n'.join(messages))
