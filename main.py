@@ -26,6 +26,17 @@ def strip_links(text: str) -> str:
         text = text.replace(match, '')
     return text
 
+def strip_commands(
+        text: str, 
+        start_chars: list = ['!', '.', '?']
+        ) -> str:
+    if text.startswith(tuple(start_chars)):
+        return ''
+    if text.startswith('"') and len(text.split('"')) <= 2:
+        return ''
+    return text
+    
+
 def main():
     args = parse_args()
     messages = []
@@ -41,9 +52,12 @@ def main():
             for msg in content:
                 if (text := msg.get('Contents')):
                     stripped = strip_links(
-                        strip_mentions(text)
+                        strip_mentions(
+                            strip_commands(text)
+                            )
                     )
-                    messages.append(stripped)
+                    if stripped:
+                        messages.append(stripped)
         except Exception as e:
             print(f'Error in {folder}: {e}')
 
