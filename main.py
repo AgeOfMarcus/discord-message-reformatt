@@ -19,10 +19,10 @@ def strip_mentions(text: str) -> str:
         text = text.replace(f'@<{match}>', '')
     return text
 
+# old: '''(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])'''
 def strip_links(text: str) -> str:
-    matches = re.findall('''(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])
-''', text)
-    for match in matches:
+    matches = re.findall("((www\.|http://|https://)(www\.)*.*?(?=(www\.|http://|https://|$)))", text)
+    for match in matches[0]:
         text = text.replace(match, '')
     return text
 
