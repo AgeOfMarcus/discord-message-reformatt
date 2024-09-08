@@ -18,7 +18,10 @@ def main():
 
     for folder in os.listdir(args.path):
         try:
-            with open(os.path.join(args.path, folder), 'rb') as f:
+            if not os.isfile(os.path.join(args.path, folder, 'messages.json')):
+                print(f'{folder} is not a file, skipping')
+                continue
+            with open(os.path.join(args.path, folder, 'messages.json'), 'rb') as f:
                 content = json.loads(f.read().decode('utf-8','ignore'))
 
             for msg in content:
